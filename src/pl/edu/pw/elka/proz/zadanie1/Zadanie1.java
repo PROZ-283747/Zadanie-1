@@ -1,30 +1,36 @@
 package pl.edu.pw.elka.proz.zadanie1;
 
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.ComboBox;
  
 public class Zadanie1 extends Application {
 	
-	private GridPane grid, grid2;
+	private GridPane grid;
 	private Text formTitle, notification;
-	private Label userLoginLabel, userPass, enviromentLabel;
-	private TextField userLoginField, enviromentField;
+	private Label userLoginLabel, userPass;
 	private PasswordField userPassField;
 	private Button signInButton, cancelButton;
 	private Scene scene;
 	private String cssPath;
+	private ChoiceBox<String> choiceBox;
 	
 
     public static void main(String[] args) {
@@ -40,38 +46,68 @@ public class Zadanie1 extends Application {
         grid.setVgap(10);
         grid.setPadding(new Insets(25, 25, 25, 25));
         grid.setGridLinesVisible(false);
-        //grid.getColumnConstraints().add(new ColumnConstraints(100)); // column 0 is 100 wide
-        
-        grid2 = new GridPane();
         
         formTitle = new Text("Login into STYLEman system");
         grid.add(formTitle, 0,0,2,1);
         
+        ChoiceBox<String> choiceBox = new ChoiceBox<>(); 
+        
         userLoginLabel = new Label("Enviroment: ");
-        grid.add(userLoginLabel, 0, 1);
-        
-        enviromentField = new TextField();
-        grid.add(enviromentField, 1, 1);
-        
-        userLoginLabel = new Label("User login: ");
         grid.add(userLoginLabel, 0, 2);
         
-        userLoginField = new TextField();
-        grid.add(userLoginField, 1, 2);
+        choiceBox.getItems().add("Developer");
+        choiceBox.getItems().add("Testing");
+        choiceBox.getItems().add("Production");
+        choiceBox.setValue("Developer");
+        grid.add(choiceBox, 1, 2);
         
+        userLoginLabel = new Label("User login: ");
+        grid.add(userLoginLabel, 0, 3);
+        
+        ObservableList<String> usersDeveloper = 
+        	    FXCollections.observableArrayList(
+        	        "Ania",
+        	        "Ola",
+        	        "Kamil",
+        	        "Bartek",
+        	        "John",
+        	        "Sam",
+        	        "Arlo"
+        	    );
+        ObservableList<String> usersTesting = 
+        	    FXCollections.observableArrayList(
+        	        "Anita",
+        	        "Inga",
+        	        "Mi³osz",
+        	        "Miron",
+        	        "Kaja",
+        	        "Tom",
+        	        "Jery"
+        	    );
+        ObservableList<String> usersProduction = 
+        	    FXCollections.observableArrayList(
+        	        "Agata",
+        	        "Adela",
+        	        "Kinga",
+        	        "Bob",
+        	        "Maria",
+        	        "Alfred",
+        	        "Kate"
+        	    );
+        final ComboBox comboBox = new ComboBox(usersDeveloper);
+        comboBox.setPromptText("New user...");
+        comboBox.setEditable(true);  
+        grid.add(comboBox, 1, 3);
+              
         userPass = new Label("Password: ");
-        grid.add(userPass, 0, 3);
+        grid.add(userPass, 0, 4);
         
         userPassField = new PasswordField();
-        grid.add(userPassField, 1, 3);
+        grid.add(userPassField, 1, 4);
 
-        signInButton = new Button("SIgn In");
-        grid.add(signInButton, 1, 4);
-        
-        notification = new Text();
-        grid.add(notification, 1, 6);
-        
-        
+        signInButton = new Button("Sign In");
+        grid.add(signInButton, 1, 5);
+          
         signInButton.setOnAction(new EventHandler<ActionEvent>() {
         	 
             @Override
@@ -80,7 +116,20 @@ public class Zadanie1 extends Application {
             }
         });
         
-        scene = new Scene(grid, 300, 275);
+        cancelButton = new Button("Cancel");
+        grid.add(cancelButton, 1, 5);
+        grid.setHalignment(cancelButton, HPos.RIGHT);
+        
+        cancelButton.setOnAction(new EventHandler<ActionEvent>() {
+       	 
+            @Override
+            public void handle(ActionEvent event) {
+                System.out.println("Operation canceled :(");
+                Platform.exit();
+            }
+        });
+       
+        scene = new Scene(grid, 350, 300);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
