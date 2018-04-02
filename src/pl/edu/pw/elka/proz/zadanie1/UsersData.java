@@ -1,34 +1,56 @@
 package pl.edu.pw.elka.proz.zadanie1;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 public class UsersData {
 
-		private String developerUsers[][]= new String[][] 
-			{{"Ola","ola"},
-			{"Ania", "ania"},
-			{"Tomek", "tomek"},
-			{"Basia", "basia"},
-			{"Kate","kate"}}; 
-		private String testingUsers[][] = new String[][] 
-			{{"Ola","ola"},
-			{"Ania", "ania"},
-			{"Tomek", "tomek"},
-			{"Basia", "basia"},
-			{"Kate","kate"}};
-		private String productionUsers[][] = new String[][]
-			{{"Ola","ola"},
-			{"Ania", "ania"},
-			{"Tomek", "tomek"},
-			{"Basia", "basia"},
-			{"Kate","kate"}};
+		private String developerTable[][]= new String[][] 
+			{{"Ola","098765"},
+			{"Ania", "jestemania"},
+			{"Tomek", "jestemsuper"},
+			{"Basia", "devlife"},
+			{"Kate","22.03.95"}}; 
+		private String testingTable[][] = new String[][] 
+			{{"Arlo","iksde"},
+			{"Kris", "zzzzz"},
+			{"Jola", "lala"},
+			{"Ewa", "zielony"},
+			{"Justyna","karate"}};
+		private String productionTable[][] = new String[][]
+			{{"Jan","1234567"},
+			{"Bogdan", "qazwsx"},
+			{"Gra¿yna", "supersilnehas³o"},
+			{"Tytus", "romek*atomek"},
+			{"Inga","peru.2018"}};
 			
 		public boolean isPasswordCorrect(String  env, String user, String pass)
 		{
-			return true;
+			String table[][] = new String[][] {};
+			if(env == "Developer")
+				table = getDeveloperTable();
+			if(env == "Testing")
+				table = getTestingTable();
+			if(env == "Production")
+				table = getProductionTable();
+			
+			for(int i = 0; i< table.length; ++i)
+			{
+				if(table[i][0].equals(user))
+					if(table[i][1].equals(pass))
+						return true;
+			}
+			return false;
 		}
 		
-		public void addUsersToComboBox(String env)
+		public ObservableList<String> createDevUsersList(String table[][])
 		{
-			
+			ObservableList<String> list = FXCollections.observableArrayList();
+			for( int i = 0; i< table.length; ++i)
+			{
+				list.add(table[i][0]);
+			}
+			return list;
 		}
 		
 		public void printTable(String usersTable[][])
@@ -39,27 +61,28 @@ public class UsersData {
 			}
 		}
 
-		public String[][] getDeveloperUsers() {
-			return developerUsers;
+		public String[][] getDeveloperTable() {
+			return developerTable;
 		}
 
-		public void setDeveloperUsers(String developerUsers[][]) {
-			this.developerUsers = developerUsers;
+		public void setDeveloperTable(String developerTable[][]) {
+			this.developerTable = developerTable;
 		}
 
-		public String[][] getTestingUsers() {
-			return testingUsers;
+		public String[][] getTestingTable() {
+			return testingTable;
 		}
 
-		public void setTestingUsers(String testingUsers[][]) {
-			this.testingUsers = testingUsers;
+		public void setTestingTable(String testingTable[][]) {
+			this.testingTable = testingTable;
 		}
 
-		public String[][] getProductionUsers() {
-			return productionUsers;
+		public String[][] getProductionTable() {
+			return productionTable;
 		}
 
-		public void setProductionUsers(String productionUsers[][]) {
-			this.productionUsers = productionUsers;
+		public void setProductionTable(String productionTable[][]) {
+			this.productionTable = productionTable;
 		}
+
 }
