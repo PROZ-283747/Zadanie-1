@@ -8,8 +8,6 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.util.Pair;
 import javafx.scene.control.ComboBox;
@@ -44,7 +42,7 @@ public class LogonDialog {
 	UsersData usersData;
 	
 	/**
-	 *	Called when enviroment in choiceBox is changed
+	 *	Called when environment in choiceBox is changed
 	 */
 	private void enviromentChange() 
 	{
@@ -66,10 +64,10 @@ public class LogonDialog {
 		password.getText().isEmpty() ); 
 	}
 	/**
-	 * Converts buttonType to pair of to strings: environment and user's name who logged in.
+	 * Converts buttonType to pair of two strings: environment and user's name who logged in.
 	 * 
 	 * @param buttonType result of the Dialog.showAndWait()
-	 * @return pair of two strings: environment and user's name who logged in
+	 * @return Pair of two strings: environment and user's name who logged in
 	 */
 	private Pair<String, String> resultConverter(Optional<ButtonType> buttonType){
 		if (buttonType.isPresent() && buttonType.get() == loginButtonType) {
@@ -83,8 +81,7 @@ public class LogonDialog {
 	/**
 	 * Redefinition of Dialog.showAndWait() method.
 	 * 
-	 * @return Pair of environment and user's name who logged in. Null if login
-	 *         failed.
+	 * @return Pair of environment and user's name who logged in. Null if login failed.
 	 */
 	public Optional<Pair<String, String>> showAndWait() {
 		return Optional.ofNullable(resultConverter(dialog.showAndWait()));
