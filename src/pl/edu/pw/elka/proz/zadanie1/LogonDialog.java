@@ -12,131 +12,87 @@ import javafx.scene.layout.GridPane;
 import javafx.util.Pair;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Dialog;
+
 /**
- *	Class LogonDialog
+ * Class LogonDialog
  *
- *	@autor Adela Jaworowska / adela.jaworowska@gmail.com
+ * @autor Adela Jaworowska / adela.jaworowska@gmail.com
  */
 public class LogonDialog {
-	
-	//	Window
-	private Dialog dialog;
-	
-	//	Button
+
+	// Window
+	private Dialog<ButtonType> dialog;
+
+	// Button
 	private ButtonType loginButtonType;
 	private Node loginButton;
-	
+
 	private GridPane grid;
-	
-	//	Labels
+
+	// Labels
 	private Label enviromentLabel;
 	private Label userLabel;
 	private Label passLabel;
-	
-	//	Choice fields
+
+	// Choice fields
 	private PasswordField password;
 	private ChoiceBox<String> enviromentChoiceBox;
 	private ComboBox<String> userComboBox;
-	
-	// Class UsersData's object 
-	UsersData usersData;
-	
+
+	// Class UsersData's object
+	private UsersData usersData;
+
 	/**
-	 *	Called when environment in choiceBox is changed
+	 * LogonDiaog class constructor without parameters
 	 */
-	private void enviromentChange() 
-	{
-		if(enviromentChoiceBox.getValue()== "Developer")
-			userComboBox.setItems(usersData.createDevUsersList(usersData.getDeveloperTable()));
-		if(enviromentChoiceBox.getValue()== "Testing")
-			userComboBox.setItems(usersData.createDevUsersList(usersData.getTestingTable()));
-		if(enviromentChoiceBox.getValue()== "Production")
-			userComboBox.setItems(usersData.createDevUsersList(usersData.getProductionTable()));
+	public LogonDialog() {
+		this(" ", " ");
 	}
-	
+
 	/**
-	 *	Called after any change in any choice field
-	 */
-	private void afterChange()
-	{ 
-		loginButton.setDisable(enviromentChoiceBox.getValue() == null || 
-		userComboBox.getEditor().getText().trim().isEmpty() || 
-		password.getText().isEmpty() ); 
-	}
-	/**
-	 * Converts buttonType to pair of two strings: environment and user's name who logged in.
-	 * 
-	 * @param buttonType result of the Dialog.showAndWait()
-	 * @return Pair of two strings: environment and user's name who logged in
-	 */
-	private Pair<String, String> resultConverter(Optional<ButtonType> buttonType){
-		if (buttonType.isPresent() && buttonType.get() == loginButtonType) {
-			if (usersData.isPasswordCorrect(enviromentChoiceBox.getValue().toString(),
-					userComboBox.getValue().toString(), password.getText())) {
-				return new Pair<>(enviromentChoiceBox.getValue().toString(), userComboBox.getValue().toString());
-			}
-		}
-		return null;
-	}
-	/**
-	 * Redefinition of Dialog.showAndWait() method.
-	 * 
-	 * @return Pair of environment and user's name who logged in. Null if login failed.
-	 */
-	public Optional<Pair<String, String>> showAndWait() {
-		return Optional.ofNullable(resultConverter(dialog.showAndWait()));
-	}
-	
-	/**
-	 *	LogonDiaog class constructor without parameters
-	 */
-	public LogonDialog()
-	{
-		this(" "," ");
-	}
-	
-	/**
-	 *	LogonDiaog class constructor with parameters
+	 * LogonDiaog class constructor with parameters
 	 *
-	 *	@param title Tile of the dialog
-	 *	@param header Header of the dialog
+	 * @param title
+	 *            Tile of the dialog
+	 * @param header
+	 *            Header of the dialog
 	 */
 	public LogonDialog(String title, String header) {
 
 		// constructors
-		dialog = new Dialog();
+		dialog = new Dialog<>();
 		loginButtonType = new ButtonType("Login");
 		grid = new GridPane();
-		enviromentLabel= new Label("Enviroment: ");
+		enviromentLabel = new Label("Enviroment: ");
 		userLabel = new Label("User: ");
 		passLabel = new Label("Password: ");
-		password= new PasswordField();
+		password = new PasswordField();
 		enviromentChoiceBox = new ChoiceBox<>();
 		usersData = new UsersData();
-		
-		//	Setting dialog parameters
+
+		// Setting dialog parameters
 		dialog.setTitle(title);
 		dialog.setHeaderText(header);
 		dialog.setResizable(true);
-		
-		//	Adding buttons to dialog
+
+		// Adding buttons to dialog
 		dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
-		
-		//	Setting grid parameters
+
+		// Setting grid parameters
 		grid.setHgap(0);
 		grid.setVgap(15);
 		grid.setPadding(new Insets(20, 20, 10, 10));
-		
-		//	Setting choiceBox
+
+		// Setting choiceBox
 		enviromentChoiceBox.getItems().addAll("Developer", "Testing", "Production");
 		enviromentChoiceBox.setValue("Developer");
-		
+
 		// Setting comboBox
-		userComboBox = new ComboBox(usersData.createDevUsersList(usersData.getDeveloperTable()));
+		userComboBox = new ComboBox<>(usersData.createDevUsersList(usersData.getDeveloperTable()));
 		userComboBox.setPromptText("New user...");
 		userComboBox.setEditable(true);
-			
-		//	Adding fields to the window
+
+		// Adding fields to the window
 		grid.add(enviromentLabel, 0, 0);
 		grid.add(userLabel, 0, 1);
 		grid.add(passLabel, 0, 2);
@@ -147,19 +103,74 @@ public class LogonDialog {
 		// Enable/Disable login button depending on whether a username was entered.
 		loginButton = dialog.getDialogPane().lookupButton(loginButtonType);
 		loginButton.setDisable(true);
-		
-		//	Setting listeners and handling events
-		enviromentChoiceBox.valueProperty().addListener((observable, oldValue, newValue) -> 
-		{
+
+		// Setting listeners and handling events
+		enviromentChoiceBox.valueProperty().addListener((observable, oldValue, newValue) -> {
 			afterChange();
 			enviromentChange();
 		});
 		userComboBox.valueProperty().addListener((observable, oldValue, newValue) -> afterChange());
 		password.textProperty().addListener((observable, oldValue, newValue) -> afterChange());
-		
-		//	Adding grid to the dialog window
+
+		// Adding grid to the dialog window
 		dialog.getDialogPane().setContent(grid);
 
+	}
+
+	/**
+	 * Called when environment in choiceBox is changed
+	 */
+	private void enviromentChange() {
+		if (enviromentChoiceBox.getValue() == "Developer")
+			userComboBox.setItems(usersData.createDevUsersList(usersData.getDeveloperTable()));
+		if (enviromentChoiceBox.getValue() == "Testing")
+			userComboBox.setItems(usersData.createDevUsersList(usersData.getTestingTable()));
+		if (enviromentChoiceBox.getValue() == "Production")
+			userComboBox.setItems(usersData.createDevUsersList(usersData.getProductionTable()));
 		
+		clearPasswordField();
+	}
+
+	/**
+	 * Called after any change in any choice field
+	 */
+	private void afterChange() {
+		loginButton.setDisable(enviromentChoiceBox.getValue() == null
+				|| userComboBox.getEditor().getText().trim().isEmpty() || password.getText().isEmpty());
+	}
+
+	/**
+	 * Converts buttonType to pair of two strings: environment and user's name who
+	 * logged in.
+	 * 
+	 * @param buttonType
+	 *            result of the Dialog.showAndWait()
+	 * @return Pair of two strings: environment and user's name who logged in
+	 */
+	private Pair<String, String> resultConverter(Optional<ButtonType> buttonType) {
+		if (buttonType.isPresent() && buttonType.get() == loginButtonType) {
+			if (usersData.isPasswordCorrect(enviromentChoiceBox.getValue().toString(),
+					userComboBox.getValue().toString(), password.getText())) {
+				return new Pair<>(enviromentChoiceBox.getValue().toString(), userComboBox.getValue().toString());
+			}
+		}
+		return null;
+	}
+	/**
+	 * Clears password field
+	 */
+	private void clearPasswordField()
+	{
+		password.clear();
+	}
+
+	/**
+	 * Redefinition of Dialog.showAndWait() method.
+	 * 
+	 * @return Pair of two strings: environment and user's name who logged in. Null if login
+	 *         failed.
+	 */
+	public Optional<Pair<String, String>> showAndWait() {
+		return Optional.ofNullable(resultConverter(dialog.showAndWait()));
 	}
 }

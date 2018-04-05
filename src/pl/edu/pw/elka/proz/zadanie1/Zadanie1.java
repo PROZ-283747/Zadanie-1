@@ -21,17 +21,14 @@ public class Zadanie1 extends Application {
 	}
 
 	@Override
-	public void start(Stage primaryStage) throws Exception{
-		
+	public void start(Stage primaryStage) throws Exception {
+
 		Optional<Pair<String, String>> result = (new LogonDialog("Login", "Login into STYLEman system")).showAndWait();
-		
-		if(result.isPresent())
-		{
+
+		if (result.isPresent()) {
 			System.out.println("Enviroment = " + result.get().getKey() + " User = " + result.get().getValue());
-		}
-		else
-		{
-			System.out.println("Incorrect data! ");
+		} else {
+			System.out.println("Login unsuccessful! ");
 		}
 	}
 }
