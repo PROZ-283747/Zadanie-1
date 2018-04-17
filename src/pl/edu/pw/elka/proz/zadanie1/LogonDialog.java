@@ -73,7 +73,6 @@ public class LogonDialog {
 		// Setting dialog parameters
 		dialog.setTitle(title);
 		dialog.setHeaderText(header);
-		dialog.setResizable(true);
 
 		// Adding buttons to dialog
 		dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
